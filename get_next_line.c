@@ -6,8 +6,13 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:53:21 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/16 21:53:23 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/16 22:01:15 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
 
+char	*get_next_line(int fd)
+{
+
+}
