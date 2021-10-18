@@ -8,6 +8,8 @@ int	main(void)
 	fd = 1;
 
 	test = get_next_line(open("test.txt", O_RDONLY));
-	printf("Buffer size : %i\n", BUFFER_SIZE);
-	printf("What buffer got : %s\n", test);
+	printf("What buffer got :...............\n%s", test);
+	free(test);
+	test = get_next_line(open("test.txt", O_RDONLY));
+	printf("What buffer got :...............\n%s", test);
 }

@@ -22,22 +22,36 @@ static size_t	set_strlen(char *str, char set)
 	return (count);
 }
 
+static size_t	add_offset(size_t len)
+{
+	static size_t	current_offset;
+
+	current_offset = (current_offset) + len + 1;
+	printf("offset static : %zu\n", current_offset);
+	printf("len : %zu\n", len);
+	return (current_offset);
+}
+
 static char	*copy_line(char *str)
 {
 	char	*newline;
 	size_t	index;
 	size_t	len;
+	size_t	offset;
 
-	len = set_strlen(str, '\n');
+	offset = 0;
+	len = set_strlen(str + offset, '\n');
 	index = 0;
 	newline = malloc(sizeof(char) * (len + 1));
 	if (!newline)
 		return (NULL);
 	while (index <= len)
 	{
-		newline[index] = str[index];
+		newline[index] = str[index + offset];
 		index++;
 	}
+	offset = add_offset(len);
+	printf("offset : %zu\n", offset);
 	newline[index] = '\0';
 	return (newline);
 }
