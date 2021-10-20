@@ -27,6 +27,22 @@ static int	have_newline(char *str)
 		return (0);
 }
 
+static int	have_multnewline(char *str)
+{
+	int	index;
+	int	count;
+
+	index = 0;
+	count = 0;
+	while (str[index] != '\0')
+	{
+		if (str[index] == '\n')
+			count++;
+		index++;
+	}
+	return (count);
+}
+
 static char	*sender(char **save, int len)
 {
 	char	*tmp;
@@ -66,8 +82,10 @@ char	*get_next_line(int fd)
 		else
 			saver(&save, buff);
 		if (have_newline(save))
-			ret = sender(&save, have_newline(save));
+			return (sender(&save, have_newline(save)));
 	}
+	if (have_multnewline(save) > 1)
+		return (sender(&save, have_newline(save)));
 	if (nbread == 0)
 		return (save);
 	else
