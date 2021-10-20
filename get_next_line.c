@@ -60,7 +60,8 @@ static void	saver(char **save, char *buff)
 	char	*tmp;
 
 	tmp = ft_strjoin(*save, buff);
-	free(*save);
+	if (*save)
+		free(*save);
 	*save = tmp;
 }
 
@@ -71,6 +72,8 @@ char	*get_next_line(int fd)
 	char		*ret;
 	int			nbread;
 
+	if (!fd)
+		return (NULL);
 	ret = NULL;
 	nbread = 1;
 	while (nbread > 0 && !ret)
