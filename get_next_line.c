@@ -12,62 +12,64 @@
 
 #include "get_next_line.h"
 
-static size_t	set_strlen(char *str, char set)
+static int	have_newline(char *str)
 {
-	size_t	count;
+	int	count;
 
 	count = 0;
-	while (str[count] != set)
-		count++;
-	return (count);
-}
-
-static size_t	add_offset(size_t len)
-{
-	static size_t	current_offset;
-
-	current_offset = (current_offset) + len + 1;
-	printf("offset static : %zu\n", current_offset);
-	printf("len : %zu\n", len);
-	return (current_offset);
-}
-
-static char	*copy_line(char *str)
-{
-	char	*newline;
-	size_t	index;
-	size_t	len;
-	size_t	offset;
-
-	offset = 0;
-	len = set_strlen(str + offset, '\n');
-	index = 0;
-	newline = malloc(sizeof(char) * (len + 1));
-	if (!newline)
-		return (NULL);
-	while (index <= len)
+	while (str[count] != '\n' && str[count] != '\0')
 	{
-		newline[index] = str[index + offset];
-		index++;
+		count++;
 	}
-	offset = add_offset(len);
-	printf("offset : %zu\n", offset);
-	newline[index] = '\0';
-	return (newline);
+	if (str[count] == '\n')
+		return (count);
+	else
+		return (0);
+}
+
+static char	*sender(char **save, int len)
+{
+	char	*tmp;
+	char	*ret;
+
+	ret = ft_substr(*save, 0, len + 1);
+	tmp = ft_strdup(&((*save)[len + 1]));
+	free(*save);
+	*save = tmp;
+	return (ret);
+}
+
+static void	saver(char **save, char *buff)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(*save, buff);
+	free(*save);
+	*save = tmp;
 }
 
 char	*get_next_line(int fd)
 {
-	char	*buffer;
-	int		nbread;
-	char	*line;
+	static char	*save;
+	char		buff[BUFFER_SIZE + 1];
+	char		*ret;
+	int			nbread;
 
-	if (BUFFER_SIZE <= 0)
-		return (NULL);
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
-	nbread = read(fd, buffer, BUFFER_SIZE);
-	line = copy_line(buffer);
-	return (line);
+	ret = NULL;
+	nbread = 1;
+	while (nbread > 0 && !ret)
+	{
+		nbread = read(fd, buff, BUFFER_SIZE);
+		buff[nbread] = '\0';
+		if (!save)
+			save = ft_strdup(buff);
+		else
+			saver(&save, buff);
+		if (have_newline(save))
+			ret = sender(&save, have_newline(save));
+	}
+	if (nbread == 0)
+		return (save);
+	else
+		return (ret);
 }
