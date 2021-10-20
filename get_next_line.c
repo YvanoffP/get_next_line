@@ -87,7 +87,7 @@ char	*get_next_line(int fd)
 	if (have_multnewline(save) > 1)
 		return (sender(&save, have_newline(save)));
 	if (nbread == 0)
-		return (save);
+		return (NULL);
 	else
 		return (ret);
 }
