@@ -6,91 +6,85 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:53:21 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/16 22:01:15 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/21 21:35:55 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	have_newline(char *str)
+static int	newline_index(char *str)
 {
 	int	count;
 
+	if (!str)
+		return (-1);
 	count = 0;
-	while (str[count] != '\n' && str[count] != '\0')
+	while (str[count] != '\0')
 	{
+		if (str[count] == '\n')
+			return (count);
 		count++;
 	}
-	if (str[count] == '\n')
-		return (count);
-	else
-		return (0);
+	return (-1);
 }
 
-static int	have_multnewline(char *str)
+static char	*extract(char **save, int len)
 {
-	int	index;
-	int	count;
-
-	index = 0;
-	count = 0;
-	while (str[index] != '\0')
-	{
-		if (str[index] == '\n')
-			count++;
-		index++;
-	}
-	return (count);
-}
-
-static char	*sender(char **save, int len)
-{
-	char	*tmp;
+	char	*swp;
 	char	*ret;
 
+	if (!*save)
+		return (NULL);
 	ret = ft_substr(*save, 0, len + 1);
-	tmp = ft_strdup(&((*save)[len + 1]));
+	swp = ft_strdup(*save + len + 1);
 	free(*save);
-	*save = tmp;
+	*save = swp;
 	return (ret);
 }
 
-static void	saver(char **save, char *buff)
+static void	append(char **save, char *read_buffer)
 {
-	char	*tmp;
+	char	*swp;
 
-	tmp = ft_strjoin(*save, buff);
-	if (*save)
-		free(*save);
-	*save = tmp;
+	if (!read_buffer)
+		return ;
+	swp = ft_strjoin(*save, read_buffer);
+	free(*save);
+	*save = swp;
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*save;
-	char		buff[BUFFER_SIZE + 1];
-	char		*ret;
-	int			nbread;
+	static char	*save = NULL;
+	char		read_buffer[BUFFER_SIZE + 1];
+	int			read_count;
+	int			index;
 
+	index = -1;
+	
 	if (!fd)
 		return (NULL);
-	ret = NULL;
-	nbread = 1;
-	while (nbread > 0 && !ret)
+
+	while (1)
 	{
-		nbread = read(fd, buff, BUFFER_SIZE);
-		buff[nbread] = '\0';
+		index = newline_index(save);
+		if (index > -1)
+			break ;
+
+		read_count = read(fd, read_buffer, BUFFER_SIZE);
+		if (read_count == 0)
+			break ;
+
+		read_buffer[read_count] = '\0';
+
 		if (!save)
-			save = ft_strdup(buff);
+			save = ft_strdup(read_buffer);
 		else
-			saver(&save, buff);
-		if (have_newline(save))
-			return (sender(&save, have_newline(save)));
+			append(&save, read_buffer);
 	}
-	if (have_multnewline(save) > 1)
-		return (sender(&save, have_newline(save)));
-	if (nbread == 0)
+	if (index > -1)
+		return (extract(&save, index));
+	if (!save)
 		return (NULL);
-	else
-		return (ret);
+	return (extract(&save, ft_strlen(save)));
 }
