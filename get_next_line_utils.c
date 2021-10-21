@@ -6,7 +6,7 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:54:15 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/21 18:02:41 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/21 23:38:47 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (dst);
 }
 
-size_t   ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-        size_t  count;
+	size_t	count;
 
-        count = 0;
-        while (str[count] != '\0')
-                count++;
-        return (count);
+	count = 0;
+	while (str[count] != '\0')
+		count++;
+	return (count);
 }
 
 char	*ft_strdup(const char	*src)

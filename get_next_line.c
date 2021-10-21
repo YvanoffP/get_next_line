@@ -6,7 +6,7 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:53:21 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/21 22:07:51 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/21 23:35:52 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,21 @@ static int	newline_index(char *str)
 	return (-1);
 }
 
-static char	*extract(char **save, int len, int read_count)
+static char	*extract(char **save, int read_count)
 {
 	char	*swp;
 	char	*ret;
+	int		size;
 
-	if (!*save)
+	if (!**save)
+		free(*save);
+	if (!**save)
 		return (NULL);
-	ret = ft_substr(*save, 0, len + 1);
-	swp = ft_strdup(*save + len + 1);
+	size = newline_index(*save) + 1;
+	if (size == 0)
+		size = ft_strlen(*save);
+	ret = ft_substr(*save, 0, size);
+	swp = ft_substr(*save, size, ft_strlen(*save) - size);
 	free(*save);
 	if (read_count == 0)
 	{
@@ -48,12 +54,13 @@ static char	*extract(char **save, int len, int read_count)
 	return (ret);
 }
 
-static void	append(char **save, char *read_buffer)
+static void	append(char **save, char *read_buffer, int read_count)
 {
 	char	*swp;
 
 	if (!read_buffer)
 		return ;
+	read_buffer[read_count] = 0;
 	swp = ft_strjoin(*save, read_buffer);
 	free(*save);
 	*save = swp;
@@ -67,7 +74,7 @@ char	*get_next_line(int fd)
 	int			index;
 
 	index = -1;
-	if (!fd)
+	if (read(fd, 0, 0))
 		return (NULL);
 	while (1)
 	{
@@ -77,15 +84,12 @@ char	*get_next_line(int fd)
 		read_count = read(fd, read_buffer, BUFFER_SIZE);
 		if (read_count == 0)
 			break ;
-		read_buffer[read_count] = '\0';
 		if (!save)
-			save = ft_strdup(read_buffer);
+			save = ft_substr(read_buffer, 0, read_count);
 		else
-			append(&save, read_buffer);
+			append(&save, read_buffer, read_count);
 	}
-	if (index > -1)
-		return (extract(&save, index, read_count));
 	if (!save)
 		return (NULL);
-	return (extract(&save, ft_strlen(save), read_count));
+	return (extract(&save, read_count));
 }
