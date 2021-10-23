@@ -6,11 +6,11 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:54:15 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/23 14:26:04 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/23 16:11:53 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
