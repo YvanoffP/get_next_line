@@ -6,12 +6,12 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:56:31 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/21 23:37:28 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/23 14:36:38 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <sys/stat.h>
 # include <fcntl.h>
