@@ -17,7 +17,7 @@ int	main(void)
 	char	*test;
 	int		fd;
 
-	fd = open("gnlTester/files/multiple_line_no_nl", O_RDONLY);
+	fd = open("test.txt", O_RDONLY);
 	printf("What we got :");
 	test = get_next_line(fd);
 	printf("%s", test);
@@ -25,16 +25,21 @@ int	main(void)
 	printf("What we got :");
 	test = get_next_line(fd);
 	printf("%s", test);
+	free(test);
 	printf("What we got :");
 	test = get_next_line(fd);
 	printf("%s", test);
+	free(test);
 	printf("What we got :");
 	test = get_next_line(fd);
 	printf("%s", test);
+	free(test);
 	printf("What we got :");
 	test = get_next_line(fd);
 	printf("%s", test);
+	free(test);
 	printf("What we got :");
 	test = get_next_line(fd);
 	printf("%s", test);
+	free(test);
 }
