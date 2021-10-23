@@ -6,11 +6,11 @@
 /*   By: ypetruzz <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/16 21:53:21 by ypetruzz          #+#    #+#             */
-/*   Updated: 2021/10/23 14:23:09 by ypetruzz         ###   ########.fr       */
+/*   Updated: 2021/10/23 14:27:32 by ypetruzz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static int	newline_index(char *str)
 {
@@ -68,7 +68,7 @@ static void	append(char **save, char *read_buffer, int read_count)
 
 char	*get_next_line(int fd)
 {
-	static char	*save = NULL;
+	static char	*save[4096];
 	char		read_buffer[BUFFER_SIZE + 1];
 	int			read_count;
 	int			index;
@@ -78,18 +78,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (1)
 	{
-		index = newline_index(save);
+		index = newline_index(save[fd]);
 		if (index > -1)
 			break ;
 		read_count = read(fd, read_buffer, BUFFER_SIZE);
 		if (read_count == 0)
 			break ;
-		if (!save)
-			save = ft_substr(read_buffer, 0, read_count);
+		if (!save[fd])
+			save[fd] = ft_substr(read_buffer, 0, read_count);
 		else
-			append(&save, read_buffer, read_count);
+			append(&save[fd], read_buffer, read_count);
 	}
-	if (!save)
+	if (!save[fd])
 		return (NULL);
-	return (extract(&save, read_count));
+	return (extract(&save[fd], read_count));
 }
